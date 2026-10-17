@@ -1,0 +1,190 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-lime: var(--lime);
+  --color-violet: var(--violet);
+  --color-peach: var(--peach);
+  --color-danger: var(--danger);
+  --font-pixel: "Silkscreen", ui-monospace, monospace;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: oklch(0.14 0.03 270);
+  --foreground: oklch(0.95 0.02 120);
+  --card: oklch(0.19 0.04 272);
+  --card-foreground: oklch(0.95 0.02 120);
+  --popover: oklch(0.19 0.04 272);
+  --popover-foreground: oklch(0.95 0.02 120);
+  --primary: oklch(0.9 0.22 128);
+  --primary-foreground: oklch(0.16 0.03 270);
+  --secondary: oklch(0.62 0.22 300);
+  --secondary-foreground: oklch(0.98 0.01 300);
+  --muted: oklch(0.24 0.04 272);
+  --muted-foreground: oklch(0.68 0.04 270);
+  --accent: oklch(0.8 0.12 45);
+  --accent-foreground: oklch(0.16 0.03 270);
+  --destructive: oklch(0.66 0.23 22);
+  --destructive-foreground: oklch(0.98 0.01 20);
+  --border: oklch(0.32 0.05 272);
+  --input: oklch(0.3 0.05 272);
+  --ring: oklch(0.9 0.22 128);
+  --chart-1: oklch(0.9 0.22 128);
+  --chart-2: oklch(0.62 0.22 300);
+  --chart-3: oklch(0.8 0.12 45);
+  --chart-4: oklch(0.66 0.23 22);
+  --chart-5: oklch(0.7 0.1 230);
+  --sidebar: oklch(0.19 0.04 272);
+  --sidebar-foreground: oklch(0.95 0.02 120);
+  --sidebar-primary: oklch(0.9 0.22 128);
+  --sidebar-primary-foreground: oklch(0.16 0.03 270);
+  --sidebar-accent: oklch(0.24 0.04 272);
+  --sidebar-accent-foreground: oklch(0.95 0.02 120);
+  --sidebar-border: oklch(0.32 0.05 272);
+  --sidebar-ring: oklch(0.9 0.22 128);
+
+  /* game tokens */
+  --lime: oklch(0.9 0.22 128);
+  --violet: oklch(0.62 0.22 300);
+  --peach: oklch(0.8 0.12 45);
+  --danger: oklch(0.66 0.23 22);
+  --tile-floor: oklch(0.22 0.04 272);
+  --tile-floor-alt: oklch(0.205 0.04 272);
+  --tile-wall: oklch(0.4 0.07 280);
+  --tile-wall-top: oklch(0.5 0.08 285);
+  --tile-lava: oklch(0.62 0.22 35);
+  --tile-lava-hot: oklch(0.78 0.18 60);
+  --tile-key: oklch(0.88 0.17 95);
+  --tile-door: oklch(0.55 0.15 50);
+  --glow-lime: 0 0 24px color-mix(in oklab, var(--lime) 45%, transparent);
+  --glow-violet: 0 0 24px color-mix(in oklab, var(--violet) 45%, transparent);
+  --glow-danger: 0 0 28px color-mix(in oklab, var(--danger) 60%, transparent);
+  --shadow-pixel: 4px 4px 0 0 oklch(0.08 0.02 270);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--violet) 18%, transparent), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, color-mix(in oklab, var(--lime) 10%, transparent), transparent 60%),
+      var(--background);
+    min-height: 100vh;
+  }
+}
+
+@utility font-pixel { font-family: var(--font-pixel); letter-spacing: 0.04em; }
+@utility scanlines {
+  position: relative;
+  &::after {
+    content: ""; pointer-events: none; position: absolute; inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0 2px, oklch(0 0 0 / 0.12) 2px 3px);
+    border-radius: inherit;
+  }
+}
+@utility arcade-card {
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-pixel);
+  border-radius: var(--radius);
+}
+@utility glow-lime { box-shadow: var(--glow-lime); }
+@utility glow-violet { box-shadow: var(--glow-violet); }
+@utility glow-danger { box-shadow: var(--glow-danger); }
+@utility text-glow { text-shadow: 0 0 18px color-mix(in oklab, currentColor 60%, transparent); }
+
+/* tiles */
+.tile { position: relative; transition: background-color .35s ease, transform .2s ease; }
+.tile-FLOOR { background: var(--tile-floor); }
+.tile-FLOOR.alt { background: var(--tile-floor-alt); }
+.tile-WALL { background: linear-gradient(to bottom, var(--tile-wall-top) 0 22%, var(--tile-wall) 22%); box-shadow: inset 0 -3px 0 oklch(0.25 0.05 280); }
+.tile-LAVA { background: radial-gradient(circle at 30% 30%, var(--tile-lava-hot), var(--tile-lava) 60%); animation: lava 2.4s ease-in-out infinite; }
+.tile-KEY, .tile-DOOR, .tile-EXIT { background: var(--tile-floor); }
+@keyframes lava { 50% { filter: brightness(1.25) saturate(1.2); } }
+@keyframes bob { 50% { transform: translateY(-8%); } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--lime) 70%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
+@keyframes dot-in { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: scale(1); } }
+@keyframes ghost { 50% { opacity: .55; } }
+@keyframes shake { 10%,90% { transform: translateX(-2px);} 20%,80% {transform: translateX(4px);} 30%,50%,70% {transform: translateX(-6px);} 40%,60% {transform: translateX(6px);} }
+@keyframes rise { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes flicker { 0%,100% {opacity:1} 92% {opacity:1} 93% {opacity:.4} 94% {opacity:1} 96% {opacity:.6} }
+.anim-bob { animation: bob 1.2s ease-in-out infinite; }
+.anim-ghost { animation: ghost 1.1s ease-in-out infinite; }
+.anim-shake { animation: shake .6s cubic-bezier(.36,.07,.19,.97) both; }
+.anim-rise { animation: rise .35s ease-out both; }
+.anim-flicker { animation: flicker 4s infinite; }
+.path-dot { animation: dot-in .3s ease-out both; }
+.ghost-ok { background: color-mix(in oklab, var(--lime) 30%, transparent); outline: 2px dashed var(--lime); outline-offset: -3px; }
+.ghost-bad { background: color-mix(in oklab, var(--danger) 45%, transparent); outline: 2px dashed var(--danger); outline-offset: -3px; }
+.ghost-draft { background: color-mix(in oklab, var(--peach) 35%, transparent); outline: 2px dashed var(--peach); outline-offset: -3px; }
