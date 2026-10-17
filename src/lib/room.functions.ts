@@ -108,8 +108,8 @@ export const blockExitDemo = createServerFn({ method: "POST" })
     if (!ops.length) return { ok: false as const, error: "Exit has no open sides to block." };
     const p = await s.storeProposal(room, me.slot, "preset", {
       operations: ops,
-      intent: "Seal the exit with lava (demo preset)",
-      explanation: "Demo preset: deliberately pours lava on every open side of the exit. This is not an AI message.",
+      intent: "Attempt impossible edit: seal the exit",
+      explanation: "Deterministic preset (not AI): pours lava on every open side of the exit. Ghost proposal only — the board is untouched.",
     });
     return { ok: true as const, proposal: p };
   });

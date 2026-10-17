@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Board } from "@/components/game/Board";
+import { CoreSigil } from "@/components/game/Sigils";
 import { AgentCard, type ChatEvent } from "@/components/game/AgentCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +62,7 @@ function JoinGate({ code, onJoined }: { code: string; onJoined: (s: Seat) => voi
       <div className="arcade-card w-full max-w-sm space-y-4 p-6 anim-rise">
         <h1 className="font-pixel text-3xl text-lime text-glow">PARADOX</h1>
         <p className="text-sm text-muted-foreground">
-          You're invited to room <span className="font-pixel text-peach">{code.toUpperCase()}</span> as Player 2 with the <span className="text-violet">CHAOS ENGINE</span> agent.
+          You're invited to room <span className="font-pixel text-peach">{code.toUpperCase()}</span> as Player 2 with the <span className="text-coral">CHAOS ENGINE</span> agent.
         </p>
         <Input value={alias} maxLength={20} onChange={(e) => setAlias(e.target.value)} placeholder="Your alias" />
         <Button
@@ -272,7 +273,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
             className="rounded border-2 border-peach px-2 font-pixel tracking-widest text-peach hover:bg-peach hover:text-accent-foreground"
             onClick={() => {
               void navigator.clipboard.writeText(link);
-              toast.success("Invite link copied");
+              toast.success("Invite link copied", { description: "Open it in an incognito / private window (or another browser) to join as Player 2." });
             }}
             title="Copy invite link"
           >
@@ -281,7 +282,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
         </div>
         <div className="flex items-center gap-3 text-xs">
           {[p1, p2].map((p, i) => (
-            <span key={i} className={cn("flex items-center gap-1", i === 0 ? "text-lime" : "text-violet")}>
+            <span key={i} className={cn("flex items-center gap-1", i === 0 ? "text-violet" : "text-coral")}>
               <span className={cn("h-2 w-2 rounded-full", p?.online ? "bg-current" : "bg-muted-foreground")} />
               P{i + 1} {p?.alias ?? "—"}
               {p?.slot === me.slot && " (you)"}
@@ -302,6 +303,14 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
         </div>
       </header>
 
+      {!p2 && (
+        <div className="arcade-card anim-rise flex flex-wrap items-center gap-3 border-coral p-3 text-sm">
+          <span className="font-pixel text-xs text-coral">WAITING FOR PLAYER 2</span>
+          <span className="text-muted-foreground">On one laptop: open this link in an <b className="text-foreground">incognito / private window</b> (or a second browser). Each window becomes its own player.</span>
+          <code className="rounded bg-muted px-2 py-0.5 font-mono text-xs">{link}</code>
+          <Button size="sm" variant="pixel" onClick={() => { void navigator.clipboard.writeText(link); toast.success("Invite link copied"); }}>COPY</Button>
+        </div>
+      )}
       <div className="grid gap-4 lg:grid-cols-[300px_1fr_300px]">
         <AgentCard slot={1} alias={p1?.alias} online={p1?.online} mine={me.slot === 1} events={chatFor(1)} busy={busy === "ai1"} onSend={(prompt) => run("ai1", () => fPropose({ data: { ...auth, prompt } }))} />
 
@@ -322,7 +331,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
             {savedMoment && (
               <div className="pointer-events-none absolute inset-0 grid place-items-center">
                 <div className="arcade-card anim-rise glow-danger max-w-md border-danger p-5 text-center">
-                  <p className="font-pixel text-2xl text-danger text-glow">⛨ THE SOLVER SAVED THE GAME</p>
+                  <p className="font-pixel text-2xl text-danger text-glow">⛨ THE PROOF CORE SAVED THE GAME</p>
                   <p className="mt-2 text-sm text-muted-foreground">{savedMoment}</p>
                 </div>
               </div>
@@ -412,7 +421,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
               )}
               <div className="ml-auto flex gap-2">
                 <Button size="sm" variant="danger" disabled={!!busy} onClick={() => run("block", () => fBlock({ data: auth }))}>
-                  ☠ BLOCK THE EXIT (DEMO)
+                  ⚠ ATTEMPT IMPOSSIBLE EDIT
                 </Button>
                 <Button size="sm" variant="pixel" disabled={!!busy} onClick={() => confirm("Reset the level for both players?") && run("reset", () => fReset({ data: auth }))}>
                   RESET
@@ -428,9 +437,15 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
       <div className="grid gap-4 lg:grid-cols-[1fr_1.4fr]">
         {/* proof mode */}
         <section className="arcade-card p-4">
-          <h2 className="font-pixel text-sm text-lime">PROOF MODE · deterministic BFS</h2>
+          <div className="flex items-center gap-3">
+            <CoreSigil ok={shownVerdict.solvable} className="h-12 w-12 shrink-0" />
+            <div>
+              <h2 className={cn("font-pixel text-sm", shownVerdict.solvable ? "text-lime" : "text-coral")}>THE PROOF CORE</h2>
+              <p className="font-pixel text-[9px] text-muted-foreground">IMPARTIAL · DETERMINISTIC BFS · NOT AN LLM</p>
+            </div>
+          </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Subject: {proofSubject}. Searches states (row, col, hasKey) from the player's <b>current</b> position. No LLM involved.
+            Checked board: <b className="text-foreground">r{room.revision}</b> · subject: {proofSubject}. Searches states (row, col, hasKey) from the player's <b>current</b> position. No LLM involved.
           </p>
           <div className="mt-3 grid grid-cols-3 gap-2 text-center font-mono">
             <Stat label="VERDICT" value={shownVerdict.solvable ? "SOLVABLE" : "BLOCKED"} tone={shownVerdict.solvable ? "lime" : "danger"} />
@@ -513,7 +528,7 @@ function ProposalBar({
         <span className="font-pixel">NO ACTIVE PROPOSAL</span> — ask an agent, stage a manual edit, or try “Block the exit (demo)”.
       </div>
     );
-  const sourceLabel: Record<string, string> = { ai: "AI agent", "ai-repair": "AI repair", manual: "human hand-edit", preset: "demo preset (not AI)", algorithmic: "algorithmic fallback (not AI)" };
+  const sourceLabel: Record<string, string> = { ai: "AI agent", "ai-repair": "AI repair", manual: "human hand-edit", preset: "deterministic preset (not AI)", algorithmic: "algorithmic fallback (not AI)" };
   const rejected = active.status === "rejected";
   const agent = active.proposerSlot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE";
   return (
@@ -544,7 +559,7 @@ function ProposalBar({
         )}
         {rejected && (
           <>
-            <Button size="sm" variant={meSlot === 1 ? "arcade" : "violet"} disabled={!!busy} onClick={() => onCounter(active.id)}>
+            <Button size="sm" variant={meSlot === 1 ? "violet" : "danger"} disabled={!!busy} onClick={() => onCounter(active.id)}>
               ASK {meSlot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE"} TO REPAIR
             </Button>
             <Button size="sm" variant="peach" disabled={!!busy} onClick={() => onRepair(active.id)}>

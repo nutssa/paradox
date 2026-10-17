@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ChaosSigil, OracleSigil } from "./Sigils";
 
 export interface ChatEvent {
   id: number;
@@ -38,7 +39,9 @@ export function AgentCard({
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" });
   }, [events.length, busy]);
   const name = slot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE";
-  const accent = slot === 1 ? "text-lime" : "text-violet";
+  const accent = slot === 1 ? "text-violet" : "text-coral";
+  const lastAi = [...events].reverse().find((e) => e.kind === "chat_agent" || e.kind === "ai_error");
+  const aiState = busy ? "THINKING" : !lastAi ? "MODEL READY" : lastAi.kind === "ai_error" ? "AI UNAVAILABLE" : "MODEL CONNECTED";
   const send = (p: string) => {
     if (!p.trim() || busy) return;
     onSend(p.trim());
@@ -46,14 +49,17 @@ export function AgentCard({
   };
 
   return (
-    <aside className={cn("arcade-card flex min-h-[420px] flex-col", mine && (slot === 1 ? "border-lime" : "border-violet"))}>
+    <aside className={cn("arcade-card flex min-h-[420px] flex-col", mine && (slot === 1 ? "border-violet glow-violet" : "border-coral"))}>
       <header className="border-b-2 border-border p-3">
-        <div className="flex items-center justify-between">
-          <span className={cn("font-pixel text-sm", accent)}>
-            P{slot} · {name} AI
-          </span>
-          <span className={cn("h-2 w-2 rounded-full", online ? "bg-lime glow-lime" : "bg-muted-foreground")} />
+        <div className="flex items-center gap-3">
+          {slot === 1 ? <OracleSigil className="h-11 w-11 shrink-0" active={busy} /> : <ChaosSigil className="h-11 w-11 shrink-0" active={busy} />}
+          <div className="min-w-0 flex-1">
+            <span className={cn("font-pixel text-sm", accent)}>{name}</span>
+            <p className="font-pixel text-[9px] text-muted-foreground">P{slot} AGENT · {slot === 1 ? "THE ORACLE" : "THE TRICKSTER"}</p>
+          </div>
+          <span className={cn("h-2 w-2 rounded-full", online ? "bg-lime glow-lime" : "bg-muted-foreground")} title={online ? "player online" : "player offline"} />
         </div>
+        <span className={cn("mt-2 inline-block rounded border px-1.5 font-pixel text-[9px]", aiState === "AI UNAVAILABLE" ? "border-danger text-danger" : "border-border text-muted-foreground")}>{aiState} · openai/gpt-6-astra</span>
         <p className="mt-1 text-xs text-muted-foreground">
           {alias ? `${alias}${mine ? " (you)" : ""}` : "waiting for player…"} · {slot === 1 ? "creative but completable" : "clever traps, fair play"}
         </p>
@@ -69,7 +75,7 @@ export function AgentCard({
               </div>
             )}
             {e.kind === "chat_agent" && (
-              <div className={cn("mr-4 rounded border-2 px-2 py-1.5", slot === 1 ? "border-lime/40" : "border-violet/50")}>
+              <div className={cn("mr-4 rounded border-2 px-2 py-1.5", slot === 1 ? "border-violet/50" : "border-coral/50")}>
                 <span className={cn("font-pixel text-[10px]", accent)}>{name} · LIVE MODEL</span>
                 {typeof e.data?.intent === "string" && <p className="font-semibold">{e.data.intent}</p>}
                 <p className="text-muted-foreground">{e.message}</p>
@@ -94,7 +100,7 @@ export function AgentCard({
         <div className="space-y-2 border-t-2 border-border p-3">
           <div className="flex flex-wrap gap-1">
             {EXAMPLES[slot].map((ex) => (
-              <button key={ex} disabled={busy} onClick={() => send(ex)} className="rounded border border-border px-2 py-0.5 text-[11px] text-muted-foreground transition-colors hover:border-peach hover:text-peach disabled:opacity-40">
+              <button key={ex} disabled={busy} onClick={() => send(ex)} className="rounded border border-border px-2 py-0.5 text-[11px] text-muted-foreground transition-colors hover:border-lime hover:text-lime disabled:opacity-40">
                 {ex}
               </button>
             ))}
@@ -121,7 +127,7 @@ export function AgentCard({
               placeholder={`Tell ${name} what to change…`}
               className="flex-1 resize-none rounded border-2 border-input bg-background px-2 py-1 text-sm outline-none focus:border-ring"
             />
-            <Button type="submit" variant={slot === 1 ? "arcade" : "violet"} disabled={busy || !text.trim()}>
+            <Button type="submit" variant={slot === 1 ? "violet" : "danger"} disabled={busy || !text.trim()}>
               ASK
             </Button>
           </form>

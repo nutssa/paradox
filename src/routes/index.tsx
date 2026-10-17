@@ -61,8 +61,8 @@ function Index() {
         <h1 className="font-pixel text-7xl font-bold text-lime text-glow anim-flicker md:text-8xl">PARADOX</h1>
         <p className="font-pixel text-xl text-peach">Break the rules. Not the game.</p>
         <p className="max-w-md text-muted-foreground">
-          Two players. Two AI agents — <span className="text-lime">WORLDWEAVER</span> and{" "}
-          <span className="text-violet">CHAOS ENGINE</span> — rewrite one shared maze in real time. A deterministic proof engine
+          Two players. Two AI agents — <span className="text-violet">WORLDWEAVER</span> and{" "}
+          <span className="text-coral">CHAOS ENGINE</span> — rewrite one shared maze in real time. A deterministic proof engine
           blocks any edit that makes the exit unreachable.
         </p>
         <div className="arcade-card max-w-md space-y-4 p-5">

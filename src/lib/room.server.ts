@@ -155,9 +155,9 @@ export async function storeProposal(
   const opsTxt = payload.operations.map((o) => `${o.op}(${o.r},${o.c})`).join(", ");
   await logEvent(room.id, slot, "proposal", `${AGENT_NAME[slot]} ${repairOf ? "repair " : ""}proposal [${source}] @r${room.revision}: ${opsTxt}`, { proposalId: data.id, status }, room.revision);
   if (status === "rejected") {
-    await logEvent(room.id, null, "solver_block", `PROOF ENGINE rejected: ${ev.verdict.reason} (${ev.verdict.visitedStates} states explored)`, { proposalId: data.id }, room.revision);
+    await logEvent(room.id, null, "solver_block", `PROOF CORE rejected: ${ev.verdict.reason} (${ev.verdict.visitedStates} states explored)`, { proposalId: data.id }, room.revision);
   } else {
-    await logEvent(room.id, null, "solver_ok", `PROOF ENGINE verified: path of ${ev.verdict.pathLength} steps survives (${ev.verdict.visitedStates} states)`, { proposalId: data.id }, room.revision);
+    await logEvent(room.id, null, "solver_ok", `PROOF CORE verified: path of ${ev.verdict.pathLength} steps survives (${ev.verdict.visitedStates} states)`, { proposalId: data.id }, room.revision);
   }
   return mapProposal(data);
 }
