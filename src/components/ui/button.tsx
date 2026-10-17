@@ -16,6 +16,15 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        arcade:
+          "font-pixel bg-lime text-primary-foreground border-2 border-background shadow-[var(--shadow-pixel)] hover:-translate-y-0.5 hover:glow-lime active:translate-y-0.5 transition-transform",
+        violet:
+          "font-pixel bg-violet text-secondary-foreground border-2 border-background shadow-[var(--shadow-pixel)] hover:-translate-y-0.5 hover:glow-violet active:translate-y-0.5 transition-transform",
+        danger:
+          "font-pixel bg-danger text-destructive-foreground border-2 border-background shadow-[var(--shadow-pixel)] hover:-translate-y-0.5 hover:glow-danger transition-transform",
+        peach:
+          "font-pixel bg-peach text-accent-foreground border-2 border-background shadow-[var(--shadow-pixel)] hover:-translate-y-0.5 transition-transform",
+        pixel: "font-pixel border-2 border-border bg-muted text-foreground hover:border-lime hover:text-lime",
       },
       size: {
         default: "h-9 px-4 py-2",
