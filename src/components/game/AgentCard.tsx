@@ -7,7 +7,7 @@ export interface ChatEvent {
   kind: string;
   message: string;
   created_at: string;
-  data: Record<string, unknown> | null;
+  data: { intent?: string; operations?: { op: string; r: number; c: number }[] } | null;
 }
 
 const EXAMPLES: Record<1 | 2, string[]> = {

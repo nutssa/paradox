@@ -98,7 +98,7 @@ export async function getSnapshot(code: string, token: string) {
     me,
     players: (players.data ?? []).map((p) => ({ slot: p.slot as 1 | 2, alias: p.alias, online: now - new Date(p.last_seen).getTime() < 15000 })),
     proposals: (proposals.data ?? []).map(mapProposal),
-    events: (events.data ?? []).reverse().map((e) => ({ ...e, data: e.data as Record<string, unknown> | null })),
+    events: (events.data ?? []).reverse().map((e) => ({ ...e, data: e.data as { intent?: string; operations?: EditOp[]; proposalId?: string; status?: string } | null })),
     verdict: solve(room.board, room.player),
     serverTime: new Date().toISOString(),
   };
