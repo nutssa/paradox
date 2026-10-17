@@ -62,7 +62,7 @@ function JoinGate({ code, onJoined }: { code: string; onJoined: (s: Seat) => voi
       <div className="arcade-card w-full max-w-sm space-y-4 p-6 anim-rise">
         <h1 className="font-pixel text-3xl text-lime text-glow">PARADOX</h1>
         <p className="text-sm text-muted-foreground">
-          You're invited to room <span className="font-pixel text-peach">{code.toUpperCase()}</span> as Player 2 with the <span className="text-violet">CHAOS ENGINE</span> agent.
+          You're invited to room <span className="font-pixel text-peach">{code.toUpperCase()}</span> as Player 2 with the <span className="text-coral">CHAOS ENGINE</span> agent.
         </p>
         <Input value={alias} maxLength={20} onChange={(e) => setAlias(e.target.value)} placeholder="Your alias" />
         <Button
