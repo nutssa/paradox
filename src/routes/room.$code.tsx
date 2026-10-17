@@ -545,7 +545,7 @@ function ProposalBar({
         {rejected && (
           <>
             <Button size="sm" variant={meSlot === 1 ? "arcade" : "violet"} disabled={!!busy} onClick={() => onCounter(active.id)}>
-              🔧 ASK {meSlot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE"} TO REPAIR
+              ASK {meSlot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE"} TO REPAIR
             </Button>
             <Button size="sm" variant="peach" disabled={!!busy} onClick={() => onRepair(active.id)}>
               ⚙ FIND SAFE REPAIR (algorithmic)
