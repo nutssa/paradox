@@ -14,7 +14,183 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      proposals: {
+        Row: {
+          base_revision: number
+          committed_revision: number | null
+          created_at: string
+          explanation: string
+          id: string
+          intent: string
+          operations: Json
+          proposer_slot: number
+          repair_of: string | null
+          resolved_by: number | null
+          room_id: string
+          source: string
+          status: string
+          updated_at: string
+          verdict: Json | null
+        }
+        Insert: {
+          base_revision: number
+          committed_revision?: number | null
+          created_at?: string
+          explanation?: string
+          id?: string
+          intent?: string
+          operations: Json
+          proposer_slot: number
+          repair_of?: string | null
+          resolved_by?: number | null
+          room_id: string
+          source: string
+          status: string
+          updated_at?: string
+          verdict?: Json | null
+        }
+        Update: {
+          base_revision?: number
+          committed_revision?: number | null
+          created_at?: string
+          explanation?: string
+          id?: string
+          intent?: string
+          operations?: Json
+          proposer_slot?: number
+          repair_of?: string | null
+          resolved_by?: number | null
+          room_id?: string
+          source?: string
+          status?: string
+          updated_at?: string
+          verdict?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      room_events: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: number
+          kind: string
+          message: string
+          revision: number | null
+          room_id: string
+          slot: number | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+          kind: string
+          message: string
+          revision?: number | null
+          room_id: string
+          slot?: number | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: number
+          kind?: string
+          message?: string
+          revision?: number | null
+          room_id?: string
+          slot?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_events_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      room_players: {
+        Row: {
+          alias: string
+          created_at: string
+          id: string
+          last_seen: string
+          room_id: string
+          slot: number
+          token_hash: string
+        }
+        Insert: {
+          alias: string
+          created_at?: string
+          id?: string
+          last_seen?: string
+          room_id: string
+          slot: number
+          token_hash: string
+        }
+        Update: {
+          alias?: string
+          created_at?: string
+          id?: string
+          last_seen?: string
+          room_id?: string
+          slot?: number
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_players_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rooms: {
+        Row: {
+          board: Json
+          code: string
+          created_at: string
+          id: string
+          move_seq: number
+          player: Json
+          revision: number
+          updated_at: string
+          wins: number
+        }
+        Insert: {
+          board: Json
+          code: string
+          created_at?: string
+          id?: string
+          move_seq?: number
+          player: Json
+          revision?: number
+          updated_at?: string
+          wins?: number
+        }
+        Update: {
+          board?: Json
+          code?: string
+          created_at?: string
+          id?: string
+          move_seq?: number
+          player?: Json
+          revision?: number
+          updated_at?: string
+          wins?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
