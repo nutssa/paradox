@@ -111,7 +111,7 @@ const STATUS_STYLE: Record<string, string> = {
 };
 
 function Game({ code, seat }: { code: string; seat: Seat }) {
-  const { snap, mode, lastSync, error, ping, setSnap } = useRoom(code, seat.token);
+  const { snap, mode, lastSync, error, ping } = useRoom(code, seat.token);
   const auth = { code, token: seat.token };
   const fMove = useServerFn(movePlayerFn);
   const fPropose = useServerFn(proposeEdits);
@@ -471,7 +471,6 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
         </section>
       </div>
       {error && <p className="text-center font-mono text-xs text-danger">sync error: {error} — retrying</p>}
-      <span className="hidden">{setSnap.length}</span>
     </main>
   );
 }
