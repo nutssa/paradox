@@ -63,6 +63,8 @@
   --color-violet: var(--violet);
   --color-peach: var(--peach);
   --color-danger: var(--danger);
+  --color-coral: var(--coral);
+  --color-chalk: var(--chalk);
   --font-pixel: "Silkscreen", ui-monospace, monospace;
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -70,23 +72,23 @@
 
 :root {
   --radius: 0.25rem;
-  --background: oklch(0.14 0.03 270);
-  --foreground: oklch(0.95 0.02 120);
-  --card: oklch(0.19 0.04 272);
+  --background: oklch(0.21 0.03 265);
+  --foreground: oklch(0.97 0.006 125);
+  --card: oklch(0.245 0.035 265);
   --card-foreground: oklch(0.95 0.02 120);
   --popover: oklch(0.19 0.04 272);
   --popover-foreground: oklch(0.95 0.02 120);
-  --primary: oklch(0.9 0.22 128);
+  --primary: oklch(0.91 0.17 120);
   --primary-foreground: oklch(0.16 0.03 270);
-  --secondary: oklch(0.62 0.22 300);
+  --secondary: oklch(0.67 0.15 292);
   --secondary-foreground: oklch(0.98 0.01 300);
-  --muted: oklch(0.24 0.04 272);
+  --muted: oklch(0.27 0.035 265);
   --muted-foreground: oklch(0.68 0.04 270);
-  --accent: oklch(0.8 0.12 45);
+  --accent: oklch(0.73 0.17 28);
   --accent-foreground: oklch(0.16 0.03 270);
-  --destructive: oklch(0.66 0.23 22);
+  --destructive: oklch(0.73 0.17 28);
   --destructive-foreground: oklch(0.98 0.01 20);
-  --border: oklch(0.32 0.05 272);
+  --border: oklch(0.34 0.04 265);
   --input: oklch(0.3 0.05 272);
   --ring: oklch(0.9 0.22 128);
   --chart-1: oklch(0.9 0.22 128);
@@ -104,18 +106,20 @@
   --sidebar-ring: oklch(0.9 0.22 128);
 
   /* game tokens */
-  --lime: oklch(0.9 0.22 128);
-  --violet: oklch(0.62 0.22 300);
-  --peach: oklch(0.8 0.12 45);
-  --danger: oklch(0.66 0.23 22);
-  --tile-floor: oklch(0.22 0.04 272);
-  --tile-floor-alt: oklch(0.205 0.04 272);
-  --tile-wall: oklch(0.4 0.07 280);
-  --tile-wall-top: oklch(0.5 0.08 285);
-  --tile-lava: oklch(0.62 0.22 35);
+  --lime: oklch(0.91 0.17 120);
+  --violet: oklch(0.67 0.15 292);
+  --peach: oklch(0.85 0.1 75);
+  --danger: oklch(0.73 0.17 28);
+  --coral: oklch(0.73 0.17 28);
+  --chalk: oklch(0.97 0.006 125);
+  --tile-floor: oklch(0.27 0.03 262);
+  --tile-floor-alt: oklch(0.255 0.03 262);
+  --tile-wall: oklch(0.36 0.06 285);
+  --tile-wall-top: oklch(0.52 0.09 290);
+  --tile-lava: oklch(0.62 0.2 30);
   --tile-lava-hot: oklch(0.78 0.18 60);
-  --tile-key: oklch(0.88 0.17 95);
-  --tile-door: oklch(0.55 0.15 50);
+  --tile-key: oklch(0.91 0.17 120);
+  --tile-door: oklch(0.33 0.08 292);
   --glow-lime: 0 0 24px color-mix(in oklab, var(--lime) 45%, transparent);
   --glow-violet: 0 0 24px color-mix(in oklab, var(--violet) 45%, transparent);
   --glow-danger: 0 0 28px color-mix(in oklab, var(--danger) 60%, transparent);
@@ -138,7 +142,7 @@
     font-family: var(--font-sans);
     background:
       radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--violet) 18%, transparent), transparent 60%),
-      radial-gradient(900px 500px at 110% 10%, color-mix(in oklab, var(--lime) 10%, transparent), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, color-mix(in oklab, var(--coral) 9%, transparent), transparent 60%),
       var(--background);
     min-height: 100vh;
   }
@@ -165,13 +169,21 @@
 @utility text-glow { text-shadow: 0 0 18px color-mix(in oklab, currentColor 60%, transparent); }
 
 /* tiles */
-.tile { position: relative; transition: background-color .35s ease, transform .2s ease; }
-.tile-FLOOR { background: var(--tile-floor); }
+.tile { position: relative; transition: background-color .35s ease, transform .2s ease; border-radius: 3px; }
+.tile-FLOOR, .tile-KEY, .tile-DOOR, .tile-EXIT { background: linear-gradient(145deg, color-mix(in oklab, var(--tile-floor) 100%, white 4%), var(--tile-floor)); box-shadow: inset 0 1px 0 oklch(1 0 0 / .05), inset 0 -2px 0 oklch(0 0 0 / .25); }
 .tile-FLOOR.alt { background: var(--tile-floor-alt); }
-.tile-WALL { background: linear-gradient(to bottom, var(--tile-wall-top) 0 22%, var(--tile-wall) 22%); box-shadow: inset 0 -3px 0 oklch(0.25 0.05 280); }
-.tile-LAVA { background: radial-gradient(circle at 30% 30%, var(--tile-lava-hot), var(--tile-lava) 60%); animation: lava 2.4s ease-in-out infinite; }
-.tile-KEY, .tile-DOOR, .tile-EXIT { background: var(--tile-floor); }
-@keyframes lava { 50% { filter: brightness(1.25) saturate(1.2); } }
+.tile-WALL { background: linear-gradient(to bottom, var(--tile-wall-top) 0 26%, var(--tile-wall) 26% 100%); box-shadow: inset 2px 2px 0 oklch(1 0 0 / .12), inset -2px -4px 0 oklch(0.18 0.04 285), 0 3px 0 oklch(0.15 0.03 270); transform: translateY(-2px); z-index: 1; }
+.tile-LAVA { background: radial-gradient(circle at 30% 30%, var(--tile-lava-hot), var(--tile-lava) 55%, oklch(0.45 0.18 25)); background-size: 160% 160%; animation: lava 3.2s ease-in-out infinite; box-shadow: inset 0 0 10px oklch(0.3 0.15 25), 0 0 14px color-mix(in oklab, var(--coral) 35%, transparent); }
+.chamber { background: linear-gradient(160deg, oklch(0.32 0.04 265), oklch(0.17 0.03 265)); box-shadow: 0 2px 0 oklch(0.45 0.05 265) inset, 0 -3px 0 oklch(0.12 0.02 265) inset, 0 30px 60px -20px oklch(0 0 0 / .7), 0 0 0 2px oklch(0.15 0.03 265), 0 0 80px -30px color-mix(in oklab, var(--violet) 50%, transparent); }
+.rune-gate { background: repeating-linear-gradient(90deg, var(--tile-door) 0 18%, oklch(0.24 0.05 292) 18% 25%); border: 2px solid var(--violet); box-shadow: 0 0 12px color-mix(in oklab, var(--violet) 60%, transparent), inset 0 0 8px oklch(0 0 0 / .5); }
+.rune-gate.open { opacity: .45; border-style: dashed; box-shadow: 0 0 14px color-mix(in oklab, var(--lime) 50%, transparent); }
+.exit-portal { background: conic-gradient(from var(--a, 0deg), var(--lime), var(--violet), var(--lime)); animation: spin 4s linear infinite; }
+@property --a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes spin { to { --a: 360deg; } }
+.key-glow { filter: drop-shadow(0 0 6px var(--lime)) drop-shadow(0 0 2px var(--lime)); }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+.anim-blink { animation: blink 3.5s infinite; transform-origin: center; }
+@keyframes lava { 0%,100% { background-position: 0% 0%; filter: brightness(1); } 50% { background-position: 100% 100%; filter: brightness(1.2) saturate(1.15); } }
 @keyframes bob { 50% { transform: translateY(-8%); } }
 @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--lime) 70%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
 @keyframes dot-in { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: scale(1); } }
