@@ -51,7 +51,7 @@ describe("solver", () => {
   });
 
   it("player trapped by surrounding walls", () => {
-    const { board } = lvl(["....E", ".#...", "#.#..", ".#..."]);
+    const { board } = lvl(["S...E", ".#...", "#.#..", ".#..."]);
     expect(solve(board, { r: 2, c: 1, hasKey: false }).solvable).toBe(false);
   });
 });
