@@ -142,7 +142,10 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
   // "The solver saved the game" moment — on both clients
   useEffect(() => {
     const p = snap?.proposals[0];
-    if (!p) return;
+    if (!p) {
+      if (snap && seenRejected.current === null) seenRejected.current = "";
+      return;
+    }
     if (seenRejected.current === null) {
       seenRejected.current = p.id;
       return;

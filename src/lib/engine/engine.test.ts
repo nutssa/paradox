@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseLevel, starter } from "./level";
+import { parseLevel, starter, STARTER_LEVEL } from "./level";
 import { solve } from "./solver";
 import { applyOps, validateLevel } from "./ops";
 import { blockExitPreset, findSafeRepair } from "./repair";
@@ -90,6 +90,50 @@ describe("operations", () => {
 });
 
 describe("blocking + repair", () => {
+  it("preserves the existing demo layout", () => {
+    expect(STARTER_LEVEL).toEqual([
+      "S..#....~...",
+      "##.#.##.~.#.",
+      ".....#k...#.",
+      ".###~####.#.",
+      "...#....#...",
+      "##.###.####D",
+      ".....#...~#.",
+      ".###.###.~#.",
+      "...~...#..DE",
+    ]);
+  });
+  it("keeps the authoritative board, player and revision unchanged when the preset is rejected", () => {
+    const { board, start } = starter();
+    const original = structuredClone({ board, start });
+    const operations = blockExitPreset(board, start);
+    expect(operations).toEqual([
+      { op: "addLava", r: 7, c: 11 },
+      { op: "addLava", r: 8, c: 10 },
+    ]);
+    const preview = validateLevel(board, start, operations);
+    expect(preview.valid).toBe(true);
+    expect(preview.verdict.solvable).toBe(false);
+    const rejected = commitProposal({ latestBoard: board, latestPlayer: start, latestRevision: 1, baseRevision: 1, operations });
+    expect(rejected.committed).toBe(false);
+    expect(rejected.newRevision).toBe(1);
+    expect({ board, start }).toEqual(original);
+    expect(solve(board, start).solvable).toBe(true);
+  });
+  it("only changes the board after a verified repair is approved", () => {
+    const { board, start } = starter();
+    const original = structuredClone(board);
+    const repair = findSafeRepair(board, start, blockExitPreset(board, start));
+    expect(repair).not.toBeNull();
+    if (!repair) throw new Error("Expected the existing demo repair");
+    expect(board).toEqual(original);
+    const committed = commitProposal({ latestBoard: board, latestPlayer: start, latestRevision: 1, baseRevision: 1, operations: repair.operations });
+    expect(committed.committed).toBe(true);
+    expect(committed.newRevision).toBe(2);
+    expect(committed.board).not.toEqual(original);
+    expect(solve(committed.board, start).solvable).toBe(true);
+    expect(board).toEqual(original);
+  });
   it("block-the-exit preset is unsolvable and repair restores reachability", () => {
     const { board, start } = starter();
     const ops = blockExitPreset(board, start);
@@ -97,7 +141,8 @@ describe("blocking + repair", () => {
     expect(validateLevel(board, start, ops).verdict.solvable).toBe(false);
     const fix = findSafeRepair(board, start, ops);
     expect(fix).not.toBeNull();
-    expect(validateLevel(board, start, fix!.operations, 4).verdict.solvable).toBe(true);
+    if (!fix) throw new Error("Expected the existing demo repair");
+    expect(validateLevel(board, start, fix.operations, 4).verdict.solvable).toBe(true);
   });
   it("repair is deterministic", () => {
     const { board, start } = starter();
