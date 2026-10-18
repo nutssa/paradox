@@ -1,4 +1,6 @@
 # Readability and same-demo verification
-- [ ] Improve existing chat, proposal and proof readability without changing panel hierarchy or gameplay.
-- [ ] Run existing tests and add preservation regressions for the 53-step level and unchanged board on rejection.
-- [ ] Verify two real browser sessions, impossible-edit rejection, repair approval and existing AI actions; check automatic build results.
+- [x] Improve existing chat, proposal and proof readability without changing panel hierarchy or gameplay.
+- [x] Run all 23 tests; add exact-layout, preset, unchanged-board rejection and repair-approval regressions. Existing starter measures 25 steps, not the referenced 53; level unchanged.
+- [x] Verify two distinct browser sessions, LIVE sync, shared movement, unchanged board on rejection and repair preview, synchronized approval, both real agent replies, laptop/mobile overflow and automatic build success.
+
+Limits: simultaneous approval/dismissal interleavings were not exercised; server approval uses separate room and proposal writes. No server logic or gameplay changed.
