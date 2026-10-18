@@ -311,11 +311,11 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
           <Button size="sm" variant="pixel" onClick={() => { void navigator.clipboard.writeText(link); toast.success("Invite link copied"); }}>COPY</Button>
         </div>
       )}
-      <div className="grid gap-4 lg:grid-cols-[300px_1fr_300px]">
+      <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)_300px]">
         <AgentCard slot={1} alias={p1?.alias} online={p1?.online} mine={me.slot === 1} events={chatFor(1)} busy={busy === "ai1"} onSend={(prompt) => run("ai1", () => fPropose({ data: { ...auth, prompt } }))} />
 
         {/* center */}
-        <section className="space-y-3">
+        <section className="min-w-0 space-y-3">
           <div className="relative">
             <Board
               board={room.board}
@@ -332,7 +332,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
               <div className="pointer-events-none absolute inset-0 grid place-items-center">
                 <div className="arcade-card anim-rise glow-danger max-w-md border-danger p-5 text-center">
                   <p className="font-pixel text-2xl text-danger text-glow">⛨ THE PROOF CORE SAVED THE GAME</p>
-                  <p className="mt-2 text-sm text-muted-foreground">{savedMoment}</p>
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">{savedMoment}</p>
                 </div>
               </div>
             )}
@@ -356,10 +356,10 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
               <Button size="icon" variant="pixel" onClick={() => move("down")} aria-label="down">▼</Button>
               <Button size="icon" variant="pixel" onClick={() => move("right")} aria-label="right">▶</Button>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               WASD / arrows move the shared player.
               <br />
-              Key: {room.player.hasKey ? <span className="text-[var(--tile-key)]">⚿ held</span> : "not yet"}
+              Key: {room.player.hasKey ? <span className="text-lime">⚿ held</span> : "not yet"}
             </p>
             <label className="ml-auto flex items-center gap-2 font-pixel text-xs">
               <Switch checked={showProof} onCheckedChange={setShowProof} /> SHOW PROOF
@@ -419,7 +419,7 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
                   </Button>
                 </>
               )}
-              <div className="ml-auto flex gap-2">
+              <div className="ml-auto flex flex-wrap gap-2">
                 <Button size="sm" variant="danger" disabled={!!busy} onClick={() => run("block", () => fBlock({ data: auth }))}>
                   ⚠ ATTEMPT IMPOSSIBLE EDIT
                 </Button>
@@ -441,10 +441,10 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
             <CoreSigil ok={shownVerdict.solvable} className="h-12 w-12 shrink-0" />
             <div>
               <h2 className={cn("font-pixel text-sm", shownVerdict.solvable ? "text-lime" : "text-coral")}>THE PROOF CORE</h2>
-              <p className="font-pixel text-[9px] text-muted-foreground">IMPARTIAL · DETERMINISTIC BFS · NOT AN LLM</p>
+              <p className="font-sans text-xs leading-relaxed text-muted-foreground">IMPARTIAL · DETERMINISTIC BFS · NOT AN LLM</p>
             </div>
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Checked board: <b className="text-foreground">r{room.revision}</b> · subject: {proofSubject}. Searches states (row, col, hasKey) from the player's <b>current</b> position. No LLM involved.
           </p>
           <div className="mt-3 grid grid-cols-3 gap-2 text-center font-mono">
@@ -452,16 +452,16 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
             <Stat label="PATH" value={shownVerdict.solvable ? `${shownVerdict.pathLength} steps` : "—"} />
             <Stat label="STATES" value={String(shownVerdict.visitedStates)} />
           </div>
-          <ul className="mt-3 space-y-1 text-xs">
+          <ul className="mt-3 space-y-2 text-sm leading-relaxed">
             {shownVerdict.constraints.map((c, i) => (
-              <li key={i} className="flex gap-2">
+              <li key={i} className="flex flex-wrap items-baseline gap-x-2">
                 <span className={c.ok ? "text-lime" : "text-danger"}>{c.ok ? "✔" : "✖"}</span>
                 <span className="font-semibold">{c.name}</span>
                 <span className="text-muted-foreground">{c.detail}</span>
               </li>
             ))}
           </ul>
-          {!shownVerdict.solvable && <p className="mt-2 rounded border border-danger/50 p-2 text-xs text-danger">Proof of impossibility: BFS exhausted all {shownVerdict.visitedStates} reachable states without touching the exit. {shownVerdict.reason}</p>}
+          {!shownVerdict.solvable && <p className="mt-2 rounded border border-danger/50 p-3 text-sm leading-relaxed text-danger">Proof of impossibility: BFS exhausted all {shownVerdict.visitedStates} reachable states without touching the exit. {shownVerdict.reason}</p>}
         </section>
 
         {/* timeline */}
@@ -470,9 +470,9 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
             <h2 className="font-pixel text-sm text-violet">TIMELINE · shared revision history</h2>
             <span className="font-mono text-[11px] text-muted-foreground">{proposals.length} proposals</span>
           </div>
-          <ol className="mt-2 max-h-64 space-y-1 overflow-y-auto font-mono text-[12px]">
+          <ol className="mt-2 max-h-64 space-y-2 overflow-y-auto overscroll-contain font-sans text-sm leading-relaxed">
             {[...logEvents].reverse().map((e) => (
-              <li key={e.id} className="flex gap-2 anim-rise">
+              <li key={e.id} className="flex gap-2 break-words anim-rise">
                 <span className="shrink-0 text-muted-foreground">{new Date(e.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</span>
                 <span className="w-9 shrink-0 text-muted-foreground">r{e.revision ?? "·"}</span>
                 <span className={cn("shrink-0", e.slot === 1 ? "text-lime" : e.slot === 2 ? "text-violet" : "text-peach")}>{e.slot ? `P${e.slot}` : "SYS"}</span>
@@ -493,8 +493,8 @@ function Game({ code, seat }: { code: string; seat: Seat }) {
 function Stat({ label, value, tone }: { label: string; value: string; tone?: "lime" | "danger" }) {
   return (
     <div className="rounded border-2 border-border p-2">
-      <p className="font-pixel text-[10px] text-muted-foreground">{label}</p>
-      <p className={cn("text-sm font-semibold", tone === "lime" && "text-lime", tone === "danger" && "text-danger")}>{value}</p>
+      <p className="font-sans text-xs text-muted-foreground">{label}</p>
+      <p className={cn("text-base font-semibold", tone === "lime" && "text-lime", tone === "danger" && "text-danger")}>{value}</p>
     </div>
   );
 }
@@ -524,7 +524,7 @@ function ProposalBar({
 }) {
   if (!active)
     return (
-      <div className="arcade-card p-3 text-xs text-muted-foreground">
+      <div className="arcade-card p-3 text-sm leading-relaxed text-muted-foreground">
         <span className="font-pixel">NO ACTIVE PROPOSAL</span> — ask an agent, stage a manual edit, or try “Block the exit (demo)”.
       </div>
     );
@@ -532,11 +532,11 @@ function ProposalBar({
   const rejected = active.status === "rejected";
   const agent = active.proposerSlot === 1 ? "WORLDWEAVER" : "CHAOS ENGINE";
   return (
-    <div className={cn("arcade-card anim-rise space-y-2 p-3", rejected ? "border-danger" : "border-lime")}>
+    <div className={cn("arcade-card anim-rise min-w-0 space-y-3 p-3", rejected ? "border-danger" : "border-lime")}>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded border-2 border-peach px-1.5 font-pixel text-[10px] text-peach">PROPOSED</span>
+        <span className="rounded border-2 border-peach px-1.5 font-sans text-xs font-semibold text-peach">PROPOSED</span>
         <span className="text-muted-foreground">→</span>
-        <span className={cn("rounded border-2 px-1.5 font-pixel text-[10px]", STATUS_STYLE[active.status])}>{rejected ? "REJECTED BY SOLVER" : "VERIFIED"}</span>
+        <span className={cn("rounded border-2 px-1.5 font-sans text-xs font-semibold", STATUS_STYLE[active.status])}>{rejected ? "REJECTED BY SOLVER" : "VERIFIED"}</span>
         <span className="font-pixel text-xs">
           P{active.proposerSlot} {agent}
         </span>
@@ -546,12 +546,12 @@ function ProposalBar({
           {active.baseRevision !== revision && <span className="text-peach"> · now r{revision}, will revalidate</span>}
         </span>
       </div>
-      <p className="text-sm">
+      <p className="break-words text-base leading-relaxed">
         <b>{active.intent}</b> <span className="text-muted-foreground">— {active.explanation}</span>
       </p>
       <code className="block font-mono text-xs">{active.operations.map((o) => `${o.op}(${o.r},${o.c})`).join(" · ")}</code>
-      <p className={cn("text-xs", rejected ? "text-danger" : "text-lime")}>Solver: {active.verdict?.reason}</p>
-      <div className="flex flex-wrap gap-2">
+      <p className={cn("text-sm leading-relaxed", rejected ? "text-danger" : "text-lime")}>Solver: {active.verdict?.reason}</p>
+      <div className="flex flex-wrap gap-2 [&_button]:h-auto [&_button]:min-h-9 [&_button]:max-w-full [&_button]:whitespace-normal [&_button]:py-2 [&_button]:font-sans [&_button]:text-sm [&_button]:leading-snug">
         {!rejected && (
           <Button size="sm" variant="arcade" disabled={!!busy} onClick={() => onApprove(active.id)}>
             ✔ APPROVE &amp; COMMIT
