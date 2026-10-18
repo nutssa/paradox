@@ -83,7 +83,7 @@
   --secondary: oklch(0.67 0.15 292);
   --secondary-foreground: oklch(0.98 0.01 300);
   --muted: oklch(0.27 0.035 265);
-  --muted-foreground: oklch(0.68 0.04 270);
+  --muted-foreground: oklch(0.78 0.025 270);
   --accent: oklch(0.73 0.17 28);
   --accent-foreground: oklch(0.16 0.03 270);
   --destructive: oklch(0.73 0.17 28);
@@ -200,3 +200,10 @@
 .ghost-ok { background: color-mix(in oklab, var(--lime) 30%, transparent); outline: 2px dashed var(--lime); outline-offset: -3px; }
 .ghost-bad { background: color-mix(in oklab, var(--danger) 45%, transparent); outline: 2px dashed var(--danger); outline-offset: -3px; }
 .ghost-draft { background: color-mix(in oklab, var(--peach) 35%, transparent); outline: 2px dashed var(--peach); outline-offset: -3px; }
+
+/* Keep conversation overflow inside the existing agent panels. */
+.agent-panel { max-height: 760px; }
+.agent-chat { min-height: 180px; max-height: 360px; scrollbar-gutter: stable; overflow-wrap: anywhere; scrollbar-color: var(--muted-foreground) var(--card); }
+@media (prefers-reduced-motion: reduce) {
+  .agent-chat { scroll-behavior: auto; }
+}
